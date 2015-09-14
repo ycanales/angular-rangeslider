@@ -1,6 +1,6 @@
 /*
  *  Angular RangeSlider Directive
- * 
+ *
  *  Version: 0.0.13
  *
  *  Author: Daniel Crisp, danielcrisp.com
@@ -126,6 +126,8 @@
                     filter: '@',
                     filterOptions: '@',
                     showValues: '@',
+                    valuesPosition: '@',
+                    showPercent: '@',
                     pinHandle: '@',
                     preventEqualMinMax: '@',
                     attachHandleValues: '@',
@@ -153,12 +155,12 @@
                 template: ['<div class="ngrs-range-slider">',
                     '<div class="ngrs-runner">',
                     '<div class="ngrs-handle ngrs-handle-min"><i></i></div>',
-                    '<div class="ngrs-handle ngrs-handle-max"><i></i></div>',
+                    '<div class="ngrs-handle ngrs-handle-max"><i ng-show="valuesPosition === \'fixed\'"></i><span class="ngrs-number" ng-show="valuesPosition === \'handle\'">{{setHandleText(filteredModelMax, showPercent)}}</span></div>',
                     '<div class="ngrs-join"></div>',
                     '</div>',
-                    '<div class="ngrs-value-runner">',
-                    '<div class="ngrs-value ngrs-value-min" ng-show="showValues"><div>{{filteredModelMin}}</div></div>',
-                    '<div class="ngrs-value ngrs-value-max" ng-show="showValues"><div>{{filteredModelMax}}</div></div>',
+                    '<div class="ngrs-value-runner" ng-show="showValues && valuesPosition === \'fixed\'">',
+                    '<div class="ngrs-value ngrs-value-min" ng-show="showValues && valuesPosition === \'fixed\'"><div>{{filteredModelMin}}</div></div>',
+                    '<div class="ngrs-value ngrs-value-max" ng-show="showValues && valuesPosition === \'fixed\'"><div>{{filteredModelMax}}</div></div>',
                     '</div>',
                     '</div>'
                 ].join(''),
@@ -339,6 +341,23 @@
                             $slider.removeClass('ngrs-disabled');
                         }
                     }
+
+                    scope.setHandleText = function (val, percent) {
+                        if (!angular.isDefined(scope.modelMax) || isNaN(val)) {
+                            angular.element(handles[1]).css(pos, '0%');
+                            return '0%';
+                        }
+                        if (percent === 'true') {
+                            console.log('val', val);
+                            if (!val) {
+                                return '0%';
+                            }
+                            return '' + (val * 100 / scope.max).toFixed(0) + '%';
+                        }
+                        // console.log('scope.max', scope.max);
+                        // console.log('scope.modelMax', scope.modelMax);
+                        return val;
+                    };
 
                     function setMinMax() {
 
