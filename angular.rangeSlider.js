@@ -348,14 +348,11 @@
                             return '0%';
                         }
                         if (percent === 'true') {
-                            console.log('val', val);
                             if (!val) {
                                 return '0%';
                             }
                             return '' + (val * 100 / scope.max).toFixed(0) + '%';
                         }
-                        // console.log('scope.max', scope.max);
-                        // console.log('scope.modelMax', scope.modelMax);
                         return val;
                     };
 
